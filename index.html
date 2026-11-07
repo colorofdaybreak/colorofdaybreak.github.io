@@ -8,6 +8,8 @@
 <script>
   // Light by default; remember the visitor's choice. Runs before paint to avoid a flash.
   try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}
+  // English by default; remember Vietnamese if chosen.
+  try { if (localStorage.getItem('lang') === 'vi') document.documentElement.lang = 'vi'; } catch (e) {}
 </script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23111'/><text x='32' y='42' font-family='Helvetica,Arial' font-size='26' font-weight='700' fill='white' text-anchor='middle'>HV</text></svg>">
 <style>
@@ -63,6 +65,8 @@ a:hover { text-decoration: underline; }
 .nav-links a { color: var(--muted); font-size: 0.8rem; white-space: nowrap; transition: color 150ms ease; }
 .nav-links a:hover, .nav-links a.active { color: var(--text); text-decoration: none; }
 .nav-right { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+/* Fade the right edge only while the links overflow and aren't scrolled to the end */
+.nav-links.more { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent); }
 
 /* ---------- Theme toggle ---------- */
 .theme-toggle {
@@ -80,6 +84,22 @@ a:hover { text-decoration: underline; }
 .theme-toggle .sun  { opacity: 0; transform: rotate(-90deg) scale(0.6); }
 [data-theme="dark"] .theme-toggle .moon { opacity: 0; transform: rotate(90deg) scale(0.6); }
 [data-theme="dark"] .theme-toggle .sun  { opacity: 1; transform: none; }
+
+/* ---------- Language toggle ---------- */
+.lang-toggle {
+  flex: none; height: 2rem; min-width: 2.4rem; padding: 0 0.55rem; border-radius: 980px;
+  border: 1px solid var(--line); background: transparent; color: var(--muted);
+  font: 600 0.72rem/1 inherit; font-family: inherit; letter-spacing: 0.04em; cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, transform 100ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+.lang-toggle:hover { background: var(--accent-soft); color: var(--text); }
+.lang-toggle:active { transform: scale(0.94); }
+.lang-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.nav-buttons { display: flex; align-items: center; gap: 0.35rem; flex: none; }
+/* Cross-fade the page text when the language changes */
+.hero, body > section, footer, .nav-links { transition: opacity 160ms ease; }
+.lang-swapping .hero, .lang-swapping body > section, .lang-swapping footer, .lang-swapping .nav-links { opacity: 0; }
 
 /* Ease the light/dark swap instead of an abrupt brightness jump */
 .theming, .theming * { transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease, box-shadow 300ms ease !important; }
@@ -204,9 +224,6 @@ footer {
   .nav-right { gap: 0.5rem; }
   .nav-links { gap: 0.8rem; }
   .nav-links a { font-size: 0.75rem; }
-}
-@media (max-width: 380px) {
-  .nav-links { -webkit-mask-image: linear-gradient(to right, #000 82%, transparent); mask-image: linear-gradient(to right, #000 82%, transparent); padding-right: 1rem; }
   .hero { padding: 4rem 1rem 3.5rem; }
   section { padding: 3.5rem 1rem; }
   .card { padding: 1.35rem; }
@@ -226,80 +243,81 @@ footer {
     <a class="nav-name" href="#top">Hung V. Vu</a>
     <div class="nav-right">
       <div class="nav-links">
-        <a href="#research">Research</a>
-        <a href="#education">Education</a>
-        <a href="#publications">Publications</a>
-        <a href="#skills">Skills</a>
-        <a href="#contact">Contact</a>
+        <a data-i18n="nav.research" href="#research">Research</a>
+        <a data-i18n="nav.education" href="#education">Education</a>
+        <a data-i18n="nav.publications" href="#publications">Publications</a>
+        <a data-i18n="nav.skills" href="#skills">Skills</a>
+        <a data-i18n="nav.contact" href="#contact">Contact</a>
       </div>
+      <div class="nav-buttons">
+      <button class="lang-toggle" id="lang-toggle" type="button" lang="vi" aria-label="Chuyển sang tiếng Việt" title="Chuyển sang tiếng Việt">VI</button>
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
         <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       </button>
+      </div>
     </div>
   </div>
 </nav>
 
 <header class="hero" id="top">
-  <p class="eyebrow">Physics · Computational Science</p>
+  <p data-i18n="hero.eyebrow" class="eyebrow">Physics · Computational Science</p>
   <h1>Hung V. Vu</h1>
-  <p class="lede">Undergraduate researcher studying nonequilibrium statistical mechanics, rare-event estimation and stochastic thermodynamics.</p>
+  <p data-i18n="hero.lede" class="lede">Undergraduate researcher studying nonequilibrium statistical mechanics, rare-event estimation and stochastic thermodynamics.</p>
   <div class="actions">
-    <a class="btn btn-primary" href="mailto:hungvv2410409@usth.edu.vn">Email me</a>
+    <a class="btn btn-primary" href="mailto:hungvv2410409@usth.edu.vn" data-i18n="hero.email">Email me</a>
     <a class="btn btn-secondary" href="https://github.com/colorofdaybreak" target="_blank" rel="noopener">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
       GitHub
     </a>
     <a class="btn btn-secondary" href="Hung-Vu-CV.pdf" target="_blank" rel="noopener" type="application/pdf">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM8 13h8v1.5H8V13zm0 3.5h8V18H8v-1.5zM8 9.5h3V11H8V9.5z"/></svg>
-      CV (PDF)
-    </a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM8 13h8v1.5H8V13zm0 3.5h8V18H8v-1.5zM8 9.5h3V11H8V9.5z"/></svg><span data-i18n="hero.cv">CV (PDF)</span>    </a>
   </div>
 </header>
 
 <section class="alt" id="interests">
   <div class="wrap reveal">
-    <h2>Research interests.</h2>
+    <h2 data-i18n="int.title">Research interests.</h2>
     <div class="interests">
-      <span class="pill">Nonequilibrium statistical mechanics</span>
-      <span class="pill">Rare-event estimation</span>
-      <span class="pill">Stochastic thermodynamics</span>
+      <span data-i18n="int.1" class="pill">Nonequilibrium statistical mechanics</span>
+      <span data-i18n="int.2" class="pill">Rare-event estimation</span>
+      <span data-i18n="int.3" class="pill">Stochastic thermodynamics</span>
     </div>
   </div>
 </section>
 
 <section id="research">
   <div class="wrap">
-    <h2 class="reveal">Research experience.</h2>
+    <h2 data-i18n="res.title" class="reveal">Research experience.</h2>
     <div class="grid">
 
       <article class="card reveal">
-        <h3>Institute of Atomic and Molecular Sciences, Academia Sinica</h3>
-        <div class="meta"><span>Taipei, Taiwan</span><span>10/2026 – Present</span></div>
-        <p class="role">Research Assistant, Quantum Theory of Advanced Materials</p>
-        <p class="note">With Prof. Mei-Yin Chou and Dr. Martin Callsen</p>
+        <h3 data-i18n="res.iams.org">Institute of Atomic and Molecular Sciences, Academia Sinica</h3>
+        <div class="meta"><span data-i18n="loc.taipei">Taipei, Taiwan</span><span data-i18n="res.iams.date">10/2026 – Present</span></div>
+        <p data-i18n="res.iams.role" class="role">Research Assistant, Quantum Theory of Advanced Materials</p>
+        <p data-i18n="res.iams.note" class="note">With Prof. Mei-Yin Chou and Dr. Martin Callsen</p>
       </article>
 
       <article class="card reveal">
-        <h3>Institute of Physics, Vietnam Academy of Science and Technology</h3>
-        <div class="meta"><span>Hanoi, Vietnam</span><span>12/2025 – Present</span></div>
-        <p class="role">Research Assistant, Biophysics Group</p>
-        <p class="note">With Assoc. Prof. Trinh Xuan Hoang, on protein folding and stochastic thermodynamics</p>
+        <h3 data-i18n="res.iop.org">Institute of Physics, Vietnam Academy of Science and Technology</h3>
+        <div class="meta"><span data-i18n="loc.hanoi">Hanoi, Vietnam</span><span data-i18n="res.iop.date">12/2025 – Present</span></div>
+        <p data-i18n="res.iop.role" class="role">Research Assistant, Biophysics Group</p>
+        <p data-i18n="res.iop.note" class="note">With Assoc. Prof. Trinh Xuan Hoang, on protein folding and stochastic thermodynamics</p>
         <ul class="points">
-          <li><strong>Rare-event sampling &amp; normalizing flows.</strong> Implementing tail-aware normalizing flows in JAX to augment importance sampling for Jarzynski free-energy estimation, focusing on variance reduction in rare-trajectory regimes through learned proposal distributions.</li>
-          <li><strong>Computational physics (C++/JAX).</strong> Developed high-performance simulations of nonequilibrium work measurements with the BAOAB integrator; parallelized ensemble sampling with OpenMP on IOP's HPC cluster. Convergence analysis via phase diagrams over protocol speed and system size.</li>
-          <li><strong>Gō-model protein folding.</strong> Implemented parallel exact enumeration of 2D lattice protein structures and free-energy landscapes; optimized C++ enumeration for rapid structure classification.</li>
-          <li><strong>Numerical methods.</strong> Stochastic integration, importance sampling, MATLAB/Mathematica symbolic computation, and convergence diagnostics for rare-event estimators.</li>
+          <li data-i18n="res.p1"><strong>Rare-event sampling &amp; normalizing flows.</strong> Implementing tail-aware normalizing flows in JAX to augment importance sampling for Jarzynski free-energy estimation, focusing on variance reduction in rare-trajectory regimes through learned proposal distributions.</li>
+          <li data-i18n="res.p2"><strong>Computational physics (C++/JAX).</strong> Developed high-performance simulations of nonequilibrium work measurements with the BAOAB integrator; parallelized ensemble sampling with OpenMP on IOP's HPC cluster. Convergence analysis via phase diagrams over protocol speed and system size.</li>
+          <li data-i18n="res.p3"><strong>Gō-model protein folding.</strong> Implemented parallel exact enumeration of 2D lattice protein structures and free-energy landscapes; optimized C++ enumeration for rapid structure classification.</li>
+          <li data-i18n="res.p4"><strong>Numerical methods.</strong> Stochastic integration, importance sampling, MATLAB/Mathematica symbolic computation, and convergence diagnostics for rare-event estimators.</li>
         </ul>
       </article>
 
       <article class="card reveal">
-        <h3>Physics and Young Magazine — Vietnam Physical Society</h3>
-        <div class="meta"><span>Hanoi, Vietnam</span><span>10/2025 – 08/2026</span></div>
-        <p class="role">Research Assistant, Optics Group</p>
+        <h3 data-i18n="res.pym.org">Physics and Young Magazine — Vietnam Physical Society</h3>
+        <div class="meta"><span data-i18n="loc.hanoi">Hanoi, Vietnam</span><span data-i18n="res.pym.date">10/2025 – 08/2026</span></div>
+        <p data-i18n="res.pym.role" class="role">Research Assistant, Optics Group</p>
         <ul class="points">
-          <li><strong>Numerical ray tracing (MATLAB/C++).</strong> Built high-precision ray-tracing simulations solving the Euler–Lagrange equations for 3D laser propagation in graded-index media; extracted Fermat ray invariants across spherical refractive-index profiles.</li>
-          <li><strong>Variational methods.</strong> Formulated frameworks based on Fermat's principle to model optical dynamics and predict beam collimation in Luneburg–Hooke profiles.</li>
+          <li data-i18n="res.p5"><strong>Numerical ray tracing (MATLAB/C++).</strong> Built high-precision ray-tracing simulations solving the Euler–Lagrange equations for 3D laser propagation in graded-index media; extracted Fermat ray invariants across spherical refractive-index profiles.</li>
+          <li data-i18n="res.p6"><strong>Variational methods.</strong> Formulated frameworks based on Fermat's principle to model optical dynamics and predict beam collimation in Luneburg–Hooke profiles.</li>
         </ul>
       </article>
 
@@ -309,19 +327,19 @@ footer {
 
 <section class="alt" id="education">
   <div class="wrap">
-    <h2 class="reveal">Education.</h2>
+    <h2 data-i18n="edu.title" class="reveal">Education.</h2>
     <div class="edu">
       <article class="card reveal">
-        <h3>University of Science and Technology of Hanoi</h3>
-        <div class="meta"><span>Hanoi, Vietnam</span><span>10/2024 – 07/2027 (expected)</span></div>
-        <p class="role">B.Sc. Semiconductor and Integrated Circuit Technology</p>
-        <p class="note">Relevant coursework: Statistical Mechanics, Mathematics for Physics, Electronics, Semiconductor Physics</p>
-        <span class="gpa">GPA 3.5</span>
+        <h3 data-i18n="edu.usth.org">University of Science and Technology of Hanoi</h3>
+        <div class="meta"><span data-i18n="loc.hanoi">Hanoi, Vietnam</span><span data-i18n="edu.usth.date">10/2024 – 07/2027 (expected)</span></div>
+        <p data-i18n="edu.usth.deg" class="role">B.Sc. Semiconductor and Integrated Circuit Technology</p>
+        <p data-i18n="edu.usth.course" class="note">Relevant coursework: Statistical Mechanics, Mathematics for Physics, Electronics, Semiconductor Physics</p>
+        <span data-i18n="edu.gpa" class="gpa">GPA 3.5</span>
       </article>
       <article class="card reveal">
-        <h3>National Tsing Hua University</h3>
-        <div class="meta"><span>Hsinchu, Taiwan</span><span>09/2026 – 01/2027</span></div>
-        <p class="role">Exchange Student</p>
+        <h3 data-i18n="edu.nthu.org">National Tsing Hua University</h3>
+        <div class="meta"><span data-i18n="loc.hsinchu">Hsinchu, Taiwan</span><span>09/2026 – 01/2027</span></div>
+        <p data-i18n="edu.nthu.role" class="role">Exchange Student</p>
       </article>
     </div>
   </div>
@@ -329,16 +347,16 @@ footer {
 
 <section id="publications">
   <div class="wrap">
-    <h2 class="reveal">Publications.</h2>
+    <h2 data-i18n="pub.title" class="reveal">Publications.</h2>
     <div class="grid">
       <article class="card reveal">
-        <p class="pub-label">In revision</p>
+        <p data-i18n="pub.rev" class="pub-label">In revision</p>
         <p class="pub-title">Unified Optical–Mechanical Ray Dynamics in Spherical GRIN Media</p>
         <p class="pub-authors">Tran Ky Vi, Nguyen Viet Hung, Pham Van Hai, Le Viet Hoang, <b>Vu Viet Hung</b>, Nguyen Pham Long Nhat, Phan Huy Thanh Dat, Bui Ha Trang, Le Xuan The Tai, Thanh D. Pham</p>
-        <p class="pub-venue">Journal of Optics, under revision</p>
+        <p data-i18n="pub.venue" class="pub-venue">Journal of Optics, under revision</p>
       </article>
       <article class="card reveal">
-        <p class="pub-label">In preparation</p>
+        <p data-i18n="pub.prep" class="pub-label">In preparation</p>
         <p class="pub-title">Convergence Analysis and Phase Diagram of the Jarzynski Equality in Langevin Dynamics with BAOAB Integration</p>
         <p class="pub-authors"><b>Hung V. Vu</b>, Trinh Xuan Hoang</p>
       </article>
@@ -348,44 +366,44 @@ footer {
 
 <section class="alt" id="skills">
   <div class="wrap">
-    <h2 class="reveal">Technical expertise.</h2>
+    <h2 data-i18n="sk.title" class="reveal">Technical expertise.</h2>
     <div class="skills">
       <div class="card reveal">
-        <h3>Programming</h3>
+        <h3 data-i18n="sk.prog">Programming</h3>
         <div class="tags">
           <span class="tag">Python</span><span class="tag">JAX</span><span class="tag">C++</span>
           <span class="tag">OpenMP</span><span class="tag">MATLAB</span><span class="tag">Mathematica</span>
         </div>
       </div>
       <div class="card reveal">
-        <h3>Scientific computing</h3>
+        <h3 data-i18n="sk.sci">Scientific computing</h3>
         <div class="tags">
-          <span class="tag">Langevin dynamics</span><span class="tag">BAOAB</span><span class="tag">Rare-event sampling</span>
-          <span class="tag">Importance sampling</span><span class="tag">Normalizing flows</span>
-          <span class="tag">Variance reduction</span><span class="tag">Convergence analysis</span><span class="tag">HPC</span>
+          <span data-i18n="tag.langevin" class="tag">Langevin dynamics</span><span class="tag">BAOAB</span><span data-i18n="tag.rare" class="tag">Rare-event sampling</span>
+          <span data-i18n="tag.imp" class="tag">Importance sampling</span><span class="tag">Normalizing flows</span>
+          <span data-i18n="tag.var" class="tag">Variance reduction</span><span data-i18n="tag.conv" class="tag">Convergence analysis</span><span class="tag">HPC</span>
         </div>
       </div>
       <div class="card reveal">
-        <h3>Simulation &amp; modeling</h3>
+        <h3 data-i18n="sk.sim">Simulation &amp; modeling</h3>
         <div class="tags">
-          <span class="tag">Molecular dynamics</span><span class="tag">Lattice protein folding</span>
-          <span class="tag">Free-energy estimation</span><span class="tag">Ray tracing</span><span class="tag">Euler–Lagrange ODEs</span>
+          <span data-i18n="tag.md" class="tag">Molecular dynamics</span><span data-i18n="tag.lattice" class="tag">Lattice protein folding</span>
+          <span data-i18n="tag.fe" class="tag">Free-energy estimation</span><span data-i18n="tag.ray" class="tag">Ray tracing</span><span data-i18n="tag.el" class="tag">Euler–Lagrange ODEs</span>
         </div>
       </div>
       <div class="card reveal">
-        <h3>Software &amp; tools</h3>
+        <h3 data-i18n="sk.soft">Software &amp; tools</h3>
         <div class="tags">
           <span class="tag">COMSOL</span><span class="tag">Quantum ESPRESSO</span><span class="tag">Wannier90</span>
           <span class="tag">PERTURBO</span><span class="tag">Cadence</span><span class="tag">Proteus</span><span class="tag">LTspice</span>
         </div>
       </div>
       <div class="card reveal">
-        <h3>Languages</h3>
+        <h3 data-i18n="sk.lang">Languages</h3>
         <div class="langs">
-          <div class="lang"><span>Vietnamese</span><span>Native</span></div>
-          <div class="lang"><span>English</span><span>Fluent</span></div>
-          <div class="lang"><span>French</span><span>Intermediate</span></div>
-          <div class="lang"><span>Chinese</span><span>Beginner</span></div>
+          <div class="lang"><span data-i18n="lang.vi">Vietnamese</span><span data-i18n="lvl.native">Native</span></div>
+          <div class="lang"><span data-i18n="lang.en">English</span><span data-i18n="lvl.fluent">Fluent</span></div>
+          <div class="lang"><span data-i18n="lang.fr">French</span><span data-i18n="lvl.inter">Intermediate</span></div>
+          <div class="lang"><span data-i18n="lang.zh">Chinese</span><span data-i18n="lvl.beg">Beginner</span></div>
         </div>
       </div>
     </div>
@@ -394,19 +412,17 @@ footer {
 
 <section class="contact" id="contact">
   <div class="wrap reveal">
-    <h2>Get in touch.</h2>
-    <p>Open to research collaborations and graduate opportunities. References available on request.</p>
+    <h2 data-i18n="ct.title">Get in touch.</h2>
+    <p data-i18n="ct.body">Open to research collaborations and graduate opportunities. References available on request.</p>
     <div class="actions">
       <a class="btn btn-primary" href="mailto:hungvv2410409@usth.edu.vn">hungvv2410409@usth.edu.vn</a>
       <a class="btn btn-secondary" href="Hung-Vu-CV.pdf" download="Hung-Vu-CV.pdf">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a1 1 0 0 1 1 1v9.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V4a1 1 0 0 1 1-1zM5 19a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
-        Download CV
-      </a>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a1 1 0 0 1 1 1v9.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V4a1 1 0 0 1 1-1zM5 19a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg><span data-i18n="ct.download">Download CV</span>      </a>
     </div>
   </div>
 </section>
 
-<footer>© 2026 Hung V. Vu · Hanoi, Vietnam</footer>
+<footer data-i18n="footer">© 2026 Hung V. Vu · Hanoi, Vietnam</footer>
 
 <script>
   document.body.classList.remove('no-js');
@@ -414,12 +430,134 @@ footer {
   const onScroll = () => nav.classList.toggle('scrolled', scrollY > 8);
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
+  const navLinks = document.querySelector('.nav-links');
+  const syncMore = () => navLinks.classList.toggle('more', navLinks.scrollLeft + navLinks.clientWidth < navLinks.scrollWidth - 2);
+  navLinks.addEventListener('scroll', syncMore, { passive: true });
+  addEventListener('resize', syncMore);
+
   const root = document.documentElement;
-  const toggle = document.getElementById('theme-toggle');
-  const syncLabel = () => {
-    const label = root.dataset.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
-    toggle.setAttribute('aria-label', label); toggle.title = label;
+
+  /* ---------- Vietnamese translation ---------- */
+  const VI = {
+    'nav.research': 'Nghiên cứu',
+    'nav.education': 'Học vấn',
+    'nav.publications': 'Công bố',
+    'nav.skills': 'Kỹ năng',
+    'nav.contact': 'Liên hệ',
+    'hero.eyebrow': 'Vật lý · Khoa học tính toán',
+    'hero.lede': 'Sinh viên nghiên cứu về cơ học thống kê không cân bằng, ước lượng sự kiện hiếm và nhiệt động lực học ngẫu nhiên.',
+    'hero.email': 'Gửi email',
+    'hero.cv': 'CV (PDF)',
+    'int.title': 'Hướng nghiên cứu.',
+    'int.1': 'Cơ học thống kê không cân bằng',
+    'int.2': 'Ước lượng sự kiện hiếm',
+    'int.3': 'Nhiệt động lực học ngẫu nhiên',
+    'res.title': 'Kinh nghiệm nghiên cứu.',
+    'res.iams.org': 'Viện Khoa học Nguyên tử và Phân tử, Academia Sinica',
+    'loc.taipei': 'Đài Bắc, Đài Loan',
+    'loc.hanoi': 'Hà Nội, Việt Nam',
+    'loc.hsinchu': 'Tân Trúc, Đài Loan',
+    'res.iams.date': '10/2026 – nay',
+    'res.iams.role': 'Trợ lý nghiên cứu, Nhóm Lý thuyết lượng tử về vật liệu tiên tiến',
+    'res.iams.note': 'Làm việc cùng GS. Mei-Yin Chou và TS. Martin Callsen',
+    'res.iop.org': 'Viện Vật lý, Viện Hàn lâm Khoa học và Công nghệ Việt Nam',
+    'res.iop.date': '12/2025 – nay',
+    'res.iop.role': 'Trợ lý nghiên cứu, Nhóm Vật lý sinh học',
+    'res.iop.note': 'Làm việc cùng PGS. Trịnh Xuân Hoàng về gấp cuộn protein và nhiệt động lực học ngẫu nhiên',
+    'res.p1': '<strong>Lấy mẫu sự kiện hiếm &amp; normalizing flows.</strong> Đang xây dựng các normalizing flow chú trọng phần đuôi phân bố bằng JAX nhằm tăng cường lấy mẫu quan trọng (importance sampling) cho việc ước lượng năng lượng tự do theo đẳng thức Jarzynski, tập trung giảm phương sai ở vùng quỹ đạo hiếm thông qua các phân bố đề xuất được học.',
+    'res.p2': '<strong>Vật lý tính toán (C++/JAX).</strong> Phát triển các mô phỏng hiệu năng cao cho phép đo công không cân bằng bằng bộ tích phân BAOAB; song song hóa việc lấy mẫu tập hợp bằng OpenMP trên cụm máy tính hiệu năng cao (HPC) của Viện Vật lý. Phân tích hội tụ qua giản đồ pha theo tốc độ giao thức và kích thước hệ.',
+    'res.p3': '<strong>Gấp cuộn protein theo mô hình Gō.</strong> Triển khai phép liệt kê chính xác song song các cấu trúc protein mạng 2D và bề mặt năng lượng tự do; tối ưu thuật toán liệt kê bằng C++ để phân loại cấu trúc nhanh.',
+    'res.p4': '<strong>Phương pháp số.</strong> Tích phân ngẫu nhiên, lấy mẫu quan trọng, tính toán ký hiệu với MATLAB/Mathematica, và chẩn đoán hội tụ cho các bộ ước lượng sự kiện hiếm.',
+    'res.pym.org': 'Tạp chí Vật lý và Tuổi trẻ — Hội Vật lý Việt Nam',
+    'res.pym.date': '10/2025 – 08/2026',
+    'res.pym.role': 'Trợ lý nghiên cứu, Nhóm Quang học',
+    'res.p5': '<strong>Dò tia số (MATLAB/C++).</strong> Xây dựng mô phỏng dò tia độ chính xác cao, giải phương trình Euler–Lagrange cho sự lan truyền laser 3D trong môi trường chiết suất biến thiên (GRIN); trích xuất các bất biến tia Fermat trên các phân bố chiết suất đối xứng cầu.',
+    'res.p6': '<strong>Phương pháp biến phân.</strong> Xây dựng các khung lý thuyết dựa trên nguyên lý Fermat để mô hình hóa động lực học quang học và dự đoán sự chuẩn trực chùm tia trong các phân bố Luneburg–Hooke.',
+    'edu.title': 'Học vấn.',
+    'edu.usth.org': 'Trường Đại học Khoa học và Công nghệ Hà Nội',
+    'edu.usth.date': '10/2024 – 07/2027 (dự kiến)',
+    'edu.usth.deg': 'Cử nhân Công nghệ Bán dẫn và Vi mạch',
+    'edu.usth.course': 'Các môn học liên quan: Cơ học thống kê, Toán cho Vật lý, Điện tử học, Vật lý bán dẫn',
+    'edu.gpa': 'GPA 3.5',
+    'edu.nthu.org': 'Đại học Quốc lập Thanh Hoa',
+    'edu.nthu.role': 'Sinh viên trao đổi',
+    'pub.title': 'Công bố khoa học.',
+    'pub.rev': 'Đang chỉnh sửa',
+    'pub.venue': 'Journal of Optics, đang chỉnh sửa theo phản biện',
+    'pub.prep': 'Đang chuẩn bị',
+    'sk.title': 'Chuyên môn kỹ thuật.',
+    'sk.prog': 'Lập trình',
+    'sk.sci': 'Tính toán khoa học',
+    'sk.sim': 'Mô phỏng &amp; mô hình hóa',
+    'sk.soft': 'Phần mềm &amp; công cụ',
+    'sk.lang': 'Ngoại ngữ',
+    'tag.langevin': 'Động lực học Langevin',
+    'tag.rare': 'Lấy mẫu sự kiện hiếm',
+    'tag.imp': 'Lấy mẫu quan trọng',
+    'tag.var': 'Giảm phương sai',
+    'tag.conv': 'Phân tích hội tụ',
+    'tag.md': 'Động lực học phân tử',
+    'tag.lattice': 'Gấp cuộn protein mạng',
+    'tag.fe': 'Ước lượng năng lượng tự do',
+    'tag.ray': 'Dò tia',
+    'tag.el': 'Phương trình Euler–Lagrange',
+    'lang.vi': 'Tiếng Việt',
+    'lang.en': 'Tiếng Anh',
+    'lang.fr': 'Tiếng Pháp',
+    'lang.zh': 'Tiếng Trung',
+    'lvl.native': 'Bản ngữ',
+    'lvl.fluent': 'Thành thạo',
+    'lvl.inter': 'Trung cấp',
+    'lvl.beg': 'Sơ cấp',
+    'ct.title': 'Liên hệ.',
+    'ct.body': 'Sẵn sàng hợp tác nghiên cứu và tìm kiếm cơ hội học sau đại học. Thông tin người giới thiệu sẽ được cung cấp khi có yêu cầu.',
+    'ct.download': 'Tải CV',
+    'footer': '© 2026 Hung V. Vu · Hà Nội, Việt Nam',
   };
+  const UI = {
+    en: { toDark: 'Switch to dark mode', toLight: 'Switch to light mode', title: 'Hung V. Vu',
+          desc: 'Hung V. Vu — physics researcher working on nonequilibrium statistical mechanics, rare-event estimation and stochastic thermodynamics.' },
+    vi: { toDark: 'Chuyển sang chế độ tối', toLight: 'Chuyển sang chế độ sáng', title: 'Hung V. Vu',
+          desc: 'Hung V. Vu — sinh viên nghiên cứu vật lý về cơ học thống kê không cân bằng, ước lượng sự kiện hiếm và nhiệt động lực học ngẫu nhiên.' },
+  };
+  const i18nEls = [...document.querySelectorAll('[data-i18n]')];
+  i18nEls.forEach(el => { el.dataset.en = el.innerHTML; });   // English is the HTML itself
+  const metaDesc = document.querySelector('meta[name="description"]');
+  const langBtn = document.getElementById('lang-toggle');
+  const lang = () => root.lang === 'vi' ? 'vi' : 'en';
+
+  const applyLang = () => {
+    const vi = lang() === 'vi';
+    i18nEls.forEach(el => {
+      const t = vi ? VI[el.dataset.i18n] : el.dataset.en;
+      if (t !== undefined) el.innerHTML = t;
+    });
+    document.title = UI[lang()].title;
+    metaDesc.content = UI[lang()].desc;
+    // The button names the language you'd switch to, labelled in that language
+    langBtn.textContent = vi ? 'EN' : 'VI';
+    langBtn.lang = vi ? 'en' : 'vi';
+    const l = vi ? 'Switch to English' : 'Chuyển sang tiếng Việt';
+    langBtn.setAttribute('aria-label', l); langBtn.title = l;
+    syncLabel();
+    syncMore();   // link widths change with the language
+  };
+
+  langBtn.addEventListener('click', () => {
+    const next = lang() === 'vi' ? 'en' : 'vi';
+    try { localStorage.setItem('lang', next); } catch (e) {}
+    const swap = () => { root.lang = next; applyLang(); };
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { swap(); return; }
+    root.classList.add('lang-swapping');
+    setTimeout(() => { swap(); requestAnimationFrame(() => root.classList.remove('lang-swapping')); }, 160);
+  });
+
+  const toggle = document.getElementById('theme-toggle');
+  function syncLabel() {
+    const label = root.dataset.theme === 'dark' ? UI[lang()].toLight : UI[lang()].toDark;
+    toggle.setAttribute('aria-label', label); toggle.title = label;
+  }
+  applyLang();
   syncLabel();
   toggle.addEventListener('click', () => {
     const dark = root.dataset.theme !== 'dark';

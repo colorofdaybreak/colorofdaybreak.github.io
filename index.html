@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hung V. Vu</title>
+<meta name="description" content="Hung V. Vu — physics researcher working on nonequilibrium statistical mechanics, rare-event estimation and stochastic thermodynamics.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23111'/><text x='32' y='42' font-family='Helvetica,Arial' font-size='26' font-weight='700' fill='white' text-anchor='middle'>HV</text></svg>">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f5f5f7;
+  --card: #ffffff;
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --line: rgba(0,0,0,0.08);
+  --accent: #0066cc;
+  --accent-soft: rgba(0,102,204,0.08);
+  --nav: rgba(255,255,255,0.72);
+  --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #000000;
+    --bg-alt: #101012;
+    --card: #1c1c1e;
+    --text: #f5f5f7;
+    --muted: #a1a1a6;
+    --line: rgba(255,255,255,0.1);
+    --accent: #2997ff;
+    --accent-soft: rgba(41,151,255,0.12);
+    --nav: rgba(22,22,23,0.72);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #000000; --bg-alt: #101012; --card: #1c1c1e; --text: #f5f5f7; --muted: #a1a1a6;
+  --line: rgba(255,255,255,0.1); --accent: #2997ff; --accent-soft: rgba(41,151,255,0.12);
+  --nav: rgba(22,22,23,0.72); --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 4rem; -webkit-text-size-adjust: 100%; }
+body {
+  font: 100%/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.003em;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---------- Nav: translucent material, content scrolls beneath ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--nav);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms ease;
+}
+.nav.scrolled { border-bottom-color: var(--line); }
+.nav-inner {
+  max-width: 980px; margin: 0 auto; padding: 0 1rem;
+  height: 3rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.nav-name { font-weight: 600; font-size: 0.95rem; color: var(--text); letter-spacing: -0.01em; white-space: nowrap; }
+.nav-links { display: flex; gap: 1.25rem; overflow-x: auto; scrollbar-width: none; }
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a { color: var(--muted); font-size: 0.8rem; white-space: nowrap; transition: color 150ms ease; }
+.nav-links a:hover, .nav-links a.active { color: var(--text); text-decoration: none; }
+
+/* ---------- Hero ---------- */
+.hero { text-align: center; padding: 6rem 1rem 4.5rem; max-width: 980px; margin: 0 auto; }
+.eyebrow { color: var(--accent); font-weight: 600; font-size: 1rem; letter-spacing: 0; margin-bottom: 0.75rem; }
+.hero h1 {
+  font-size: clamp(2.75rem, 8vw, 5rem);
+  line-height: 1.05; letter-spacing: -0.035em; font-weight: 700;
+}
+.hero .lede {
+  font-size: clamp(1.15rem, 2.4vw, 1.5rem); line-height: 1.35; letter-spacing: -0.012em;
+  color: var(--muted); max-width: 40rem; margin: 1.25rem auto 0; font-weight: 400;
+}
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 2.25rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.7rem 1.35rem; border-radius: 980px;
+  font-size: 1rem; font-weight: 500; letter-spacing: -0.01em;
+  transition: transform 100ms ease-out, background-color 150ms ease, opacity 150ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover { text-decoration: none; }
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { opacity: 0.88; }
+.btn-secondary { background: var(--accent-soft); color: var(--accent); }
+.btn svg { width: 1.05em; height: 1.05em; fill: currentColor; }
+
+/* ---------- Sections ---------- */
+section { padding: 4.5rem 1rem; }
+section.alt { background: var(--bg-alt); }
+.wrap { max-width: 980px; margin: 0 auto; }
+h2 {
+  font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.08; letter-spacing: -0.028em;
+  font-weight: 700; margin-bottom: 2rem;
+}
+h3 { font-size: 1.3rem; line-height: 1.25; letter-spacing: -0.018em; font-weight: 600; }
+
+.interests { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.pill {
+  padding: 0.55rem 1rem; border-radius: 980px; background: var(--card);
+  box-shadow: var(--shadow); font-size: 1rem; font-weight: 500; letter-spacing: -0.01em;
+}
+
+/* ---------- Cards ---------- */
+.grid { display: grid; gap: 1.25rem; }
+.card {
+  background: var(--card); border-radius: 18px; padding: 1.75rem;
+  box-shadow: var(--shadow);
+}
+section:not(.alt) .card { background: var(--bg-alt); box-shadow: none; }
+.meta {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem;
+  color: var(--muted); font-size: 0.9rem; margin-top: 0.3rem;
+}
+.role { font-weight: 500; color: var(--text); font-size: 1rem; margin-top: 0.85rem; }
+.note { color: var(--muted); font-size: 0.95rem; margin-top: 0.2rem; }
+.points { list-style: none; margin-top: 1.1rem; display: grid; gap: 0.9rem; }
+.points li { padding-left: 1.1rem; position: relative; font-size: 0.98rem; }
+.points li::before {
+  content: ""; position: absolute; left: 0; top: 0.62em;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+}
+.points strong { font-weight: 600; }
+
+.edu { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+.gpa {
+  display: inline-block; margin-top: 1rem; padding: 0.25rem 0.7rem; border-radius: 8px;
+  background: var(--accent-soft); color: var(--accent); font-weight: 600; font-size: 0.9rem;
+}
+
+.pub-label {
+  font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted); margin-bottom: 0.6rem;
+}
+.pub-title { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.014em; line-height: 1.35; }
+.pub-authors { color: var(--muted); font-size: 0.92rem; margin-top: 0.5rem; }
+.pub-authors b { color: var(--text); font-weight: 600; }
+.pub-venue { font-style: italic; font-size: 0.95rem; margin-top: 0.35rem; }
+
+.skills { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+.skills h3 { font-size: 1.05rem; margin-bottom: 0.85rem; }
+.tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.tag {
+  font-size: 0.85rem; padding: 0.3rem 0.7rem; border-radius: 8px;
+  background: var(--bg); border: 1px solid var(--line);
+}
+section:not(.alt) .tag { background: var(--card); }
+
+.langs { display: grid; gap: 0.6rem; }
+.lang { display: flex; justify-content: space-between; font-size: 0.95rem; }
+.lang span:last-child { color: var(--muted); }
+
+/* ---------- Contact / footer ---------- */
+.contact { text-align: center; }
+.contact h2 { margin-bottom: 1rem; }
+.contact p { color: var(--muted); font-size: 1.15rem; max-width: 34rem; margin: 0 auto; }
+footer {
+  border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8rem;
+  text-align: center; padding: 1.5rem 1rem 2.5rem;
+}
+
+/* ---------- Reveal on scroll (gentle, critically damped feel) ---------- */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 600ms cubic-bezier(.2,.7,.2,1), transform 600ms cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+.no-js .reveal { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { transform: none; transition: opacity 200ms ease; }
+  .btn:active { transform: none; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .nav { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom-color: var(--line); }
+}
+@media (max-width: 640px) {
+  .nav-name { display: none; }
+  .nav-inner { justify-content: center; }
+  .hero { padding: 4rem 1rem 3.5rem; }
+  section { padding: 3.5rem 1rem; }
+  .card { padding: 1.35rem; }
+}
+@media print {
+  .nav, .actions, footer { display: none; }
+  .reveal { opacity: 1; transform: none; }
+  section { padding: 1.25rem 0; }
+  .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+}
+</style>
+</head>
+<body class="no-js">
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="nav-name" href="#top">Hung V. Vu</a>
+    <div class="nav-links">
+      <a href="#research">Research</a>
+      <a href="#education">Education</a>
+      <a href="#publications">Publications</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <p class="eyebrow">Physics · Computational Science</p>
+  <h1>Hung V. Vu</h1>
+  <p class="lede">Undergraduate researcher studying nonequilibrium statistical mechanics, rare-event estimation and stochastic thermodynamics.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="mailto:hungvv2410409@usth.edu.vn">Email me</a>
+    <a class="btn btn-secondary" href="https://github.com/colorofdaybreak" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+  </div>
+</header>
+
+<section class="alt" id="interests">
+  <div class="wrap reveal">
+    <h2>Research interests.</h2>
+    <div class="interests">
+      <span class="pill">Nonequilibrium statistical mechanics</span>
+      <span class="pill">Rare-event estimation</span>
+      <span class="pill">Stochastic thermodynamics</span>
+    </div>
+  </div>
+</section>
+
+<section id="research">
+  <div class="wrap">
+    <h2 class="reveal">Research experience.</h2>
+    <div class="grid">
+
+      <article class="card reveal">
+        <h3>Institute of Atomic and Molecular Sciences, Academia Sinica</h3>
+        <div class="meta"><span>Taipei, Taiwan</span><span>10/2026 – Present</span></div>
+        <p class="role">Research Assistant, Quantum Theory of Advanced Materials</p>
+        <p class="note">With Prof. Mei-Yin Chou and Dr. Martin Callsen</p>
+      </article>
+
+      <article class="card reveal">
+        <h3>Institute of Physics, Vietnam Academy of Science and Technology</h3>
+        <div class="meta"><span>Hanoi, Vietnam</span><span>12/2025 – Present</span></div>
+        <p class="role">Research Assistant, Biophysics Group</p>
+        <p class="note">With Assoc. Prof. Trinh Xuan Hoang, on protein folding and stochastic thermodynamics</p>
+        <ul class="points">
+          <li><strong>Rare-event sampling &amp; normalizing flows.</strong> Implementing tail-aware normalizing flows in JAX to augment importance sampling for Jarzynski free-energy estimation, focusing on variance reduction in rare-trajectory regimes through learned proposal distributions.</li>
+          <li><strong>Computational physics (C++/JAX).</strong> Developed high-performance simulations of nonequilibrium work measurements with the BAOAB integrator; parallelized ensemble sampling with OpenMP on IOP's HPC cluster. Convergence analysis via phase diagrams over protocol speed and system size.</li>
+          <li><strong>Gō-model protein folding.</strong> Implemented parallel exact enumeration of 2D lattice protein structures and free-energy landscapes; optimized C++ enumeration for rapid structure classification.</li>
+          <li><strong>Numerical methods.</strong> Stochastic integration, importance sampling, MATLAB/Mathematica symbolic computation, and convergence diagnostics for rare-event estimators.</li>
+        </ul>
+      </article>
+
+      <article class="card reveal">
+        <h3>Physics and Young Magazine — Vietnam Physical Society</h3>
+        <div class="meta"><span>Hanoi, Vietnam</span><span>10/2025 – 08/2026</span></div>
+        <p class="role">Research Assistant, Optics Group</p>
+        <ul class="points">
+          <li><strong>Numerical ray tracing (MATLAB/C++).</strong> Built high-precision ray-tracing simulations solving the Euler–Lagrange equations for 3D laser propagation in graded-index media; extracted Fermat ray invariants across spherical refractive-index profiles.</li>
+          <li><strong>Variational methods.</strong> Formulated frameworks based on Fermat's principle to model optical dynamics and predict beam collimation in Luneburg–Hooke profiles.</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="education">
+  <div class="wrap">
+    <h2 class="reveal">Education.</h2>
+    <div class="edu">
+      <article class="card reveal">
+        <h3>University of Science and Technology of Hanoi</h3>
+        <div class="meta"><span>Hanoi, Vietnam</span><span>10/2024 – 07/2027 (expected)</span></div>
+        <p class="role">B.Sc. Semiconductor and Integrated Circuit Technology</p>
+        <p class="note">Relevant coursework: Statistical Mechanics, Mathematics for Physics, Electronics, Semiconductor Physics</p>
+        <span class="gpa">GPA 3.5</span>
+      </article>
+      <article class="card reveal">
+        <h3>National Tsing Hua University</h3>
+        <div class="meta"><span>Hsinchu, Taiwan</span><span>09/2026 – 01/2027</span></div>
+        <p class="role">Exchange Student</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="wrap">
+    <h2 class="reveal">Publications.</h2>
+    <div class="grid">
+      <article class="card reveal">
+        <p class="pub-label">In revision</p>
+        <p class="pub-title">Unified Optical–Mechanical Ray Dynamics in Spherical GRIN Media</p>
+        <p class="pub-authors">Tran Ky Vi, Nguyen Viet Hung, Pham Van Hai, Le Viet Hoang, <b>Vu Viet Hung</b>, Nguyen Pham Long Nhat, Phan Huy Thanh Dat, Bui Ha Trang, Le Xuan The Tai, Thanh D. Pham</p>
+        <p class="pub-venue">Journal of Optics, under revision</p>
+      </article>
+      <article class="card reveal">
+        <p class="pub-label">In preparation</p>
+        <p class="pub-title">Convergence Analysis and Phase Diagram of the Jarzynski Equality in Langevin Dynamics with BAOAB Integration</p>
+        <p class="pub-authors"><b>Hung V. Vu</b>, Trinh Xuan Hoang</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="skills">
+  <div class="wrap">
+    <h2 class="reveal">Technical expertise.</h2>
+    <div class="skills">
+      <div class="card reveal">
+        <h3>Programming</h3>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">JAX</span><span class="tag">C++</span>
+          <span class="tag">OpenMP</span><span class="tag">MATLAB</span><span class="tag">Mathematica</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <h3>Scientific computing</h3>
+        <div class="tags">
+          <span class="tag">Langevin dynamics</span><span class="tag">BAOAB</span><span class="tag">Rare-event sampling</span>
+          <span class="tag">Importance sampling</span><span class="tag">Normalizing flows</span>
+          <span class="tag">Variance reduction</span><span class="tag">Convergence analysis</span><span class="tag">HPC</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <h3>Simulation &amp; modeling</h3>
+        <div class="tags">
+          <span class="tag">Molecular dynamics</span><span class="tag">Lattice protein folding</span>
+          <span class="tag">Free-energy estimation</span><span class="tag">Ray tracing</span><span class="tag">Euler–Lagrange ODEs</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <h3>Software &amp; tools</h3>
+        <div class="tags">
+          <span class="tag">COMSOL</span><span class="tag">Quantum ESPRESSO</span><span class="tag">Wannier90</span>
+          <span class="tag">PERTURBO</span><span class="tag">Cadence</span><span class="tag">Proteus</span><span class="tag">LTspice</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <h3>Languages</h3>
+        <div class="langs">
+          <div class="lang"><span>Vietnamese</span><span>Native</span></div>
+          <div class="lang"><span>English</span><span>Fluent</span></div>
+          <div class="lang"><span>French</span><span>Intermediate</span></div>
+          <div class="lang"><span>Chinese</span><span>Beginner</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap reveal">
+    <h2>Get in touch.</h2>
+    <p>Open to research collaborations and graduate opportunities. References available on request.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="mailto:hungvv2410409@usth.edu.vn">hungvv2410409@usth.edu.vn</a>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Hung V. Vu · Hanoi, Vietnam</footer>
+
+<script>
+  document.body.classList.remove('no-js');
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+
+  const links = [...document.querySelectorAll('.nav-links a')];
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  ['research','education','publications','skills','contact'].forEach(id => spy.observe(document.getElementById(id)));
+</script>
+</body>
+</html>

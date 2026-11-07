@@ -200,6 +200,15 @@ section:not(.alt) .tag { background: var(--card); }
 .contact { text-align: center; }
 .contact h2 { margin-bottom: 1rem; }
 .contact p { color: var(--muted); font-size: 1.15rem; max-width: 34rem; margin: 0 auto; }
+
+/* ---------- Blog ---------- */
+.empty { text-align: center; padding: 3rem 1.5rem; }
+.empty svg { width: 2rem; height: 2rem; color: var(--muted); margin-bottom: 0.9rem; }
+.empty-title { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.016em; }
+.empty .note { max-width: 28rem; margin: 0.35rem auto 0; }
+a.post { display: block; color: var(--text); transition: transform 100ms ease-out; }
+a.post:hover { text-decoration: none; }
+a.post:active { transform: scale(0.99); }
 footer {
   border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8rem;
   text-align: center; padding: 1.5rem 1rem 2.5rem;
@@ -247,6 +256,7 @@ footer {
         <a data-i18n="nav.education" href="#education">Education</a>
         <a data-i18n="nav.publications" href="#publications">Publications</a>
         <a data-i18n="nav.skills" href="#skills">Skills</a>
+        <a data-i18n="nav.blog" href="#blog">Blog</a>
         <a data-i18n="nav.contact" href="#contact">Contact</a>
       </div>
       <div class="nav-buttons">
@@ -410,7 +420,28 @@ footer {
   </div>
 </section>
 
-<section class="contact" id="contact">
+<section id="blog">
+  <div class="wrap">
+    <h2 class="reveal" data-i18n="blog.title">Blog.</h2>
+    <div class="grid posts">
+      <!--
+        To add a post, put a card like this above the empty state and delete the empty state:
+        <a class="card post reveal" href="posts/my-post.html">
+          <p class="pub-label">Nov 2026</p>
+          <p class="pub-title">Post title</p>
+          <p class="note">One-sentence summary.</p>
+        </a>
+      -->
+      <div class="card empty reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+        <p class="empty-title" data-i18n="blog.empty">No posts yet.</p>
+        <p class="note" data-i18n="blog.soon">Notes on statistical physics, simulations and research life are coming soon.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact alt" id="contact">
   <div class="wrap reveal">
     <h2 data-i18n="ct.title">Get in touch.</h2>
     <p data-i18n="ct.body">Open to research collaborations and graduate opportunities. References available on request.</p>
@@ -443,7 +474,11 @@ footer {
     'nav.education': 'Học vấn',
     'nav.publications': 'Công bố',
     'nav.skills': 'Kỹ năng',
+    'nav.blog': 'Blog',
     'nav.contact': 'Liên hệ',
+    'blog.title': 'Blog.',
+    'blog.empty': 'Chưa có bài viết nào.',
+    'blog.soon': 'Những ghi chép về vật lý thống kê, mô phỏng và cuộc sống nghiên cứu sẽ sớm ra mắt.',
     'hero.eyebrow': 'Vật lý · Khoa học tính toán',
     'hero.lede': 'Sinh viên nghiên cứu về cơ học thống kê không cân bằng, ước lượng sự kiện hiếm và nhiệt động lực học ngẫu nhiên.',
     'hero.email': 'Gửi email',
@@ -584,7 +619,7 @@ footer {
       if (e.isIntersecting) links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
     });
   }, { rootMargin: '-45% 0px -50% 0px' });
-  ['research','education','publications','skills','contact'].forEach(id => spy.observe(document.getElementById(id)));
+  ['research','education','publications','skills','blog','contact'].forEach(id => spy.observe(document.getElementById(id)));
 </script>
 </body>
 </html>

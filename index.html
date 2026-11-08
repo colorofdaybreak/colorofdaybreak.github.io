@@ -249,7 +249,7 @@ footer {
 
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <a class="nav-name" href="#top">Hung V. Vu</a>
+    <a class="nav-name" href="#top" data-i18n="name">Hung V. Vu</a>
     <div class="nav-right">
       <div class="nav-links">
         <a data-i18n="nav.research" href="#research">Research</a>
@@ -272,7 +272,7 @@ footer {
 
 <header class="hero" id="top">
   <p data-i18n="hero.eyebrow" class="eyebrow">Physics · Computational Science</p>
-  <h1>Hung V. Vu</h1>
+  <h1 data-i18n="name">Hung V. Vu</h1>
   <p data-i18n="hero.lede" class="lede">Undergraduate researcher studying nonequilibrium statistical mechanics, rare-event estimation and stochastic thermodynamics.</p>
   <div class="actions">
     <a class="btn btn-primary" href="mailto:hungvv2410409@usth.edu.vn" data-i18n="hero.email">Email me</a>
@@ -547,13 +547,14 @@ footer {
     'ct.title': 'Liên hệ.',
     'ct.body': 'Sẵn sàng hợp tác nghiên cứu và tìm kiếm cơ hội học sau đại học. Thông tin người giới thiệu sẽ được cung cấp khi có yêu cầu.',
     'ct.download': 'Tải CV',
-    'footer': '© 2026 Hung V. Vu · Hà Nội, Việt Nam',
+    'name': 'Vũ Việt Hưng',
+    'footer': '© 2026 Vũ Việt Hưng · Hà Nội, Việt Nam',
   };
   const UI = {
     en: { toDark: 'Switch to dark mode', toLight: 'Switch to light mode', title: 'Hung V. Vu',
           desc: 'Hung V. Vu — physics researcher working on nonequilibrium statistical mechanics, rare-event estimation and stochastic thermodynamics.' },
-    vi: { toDark: 'Chuyển sang chế độ tối', toLight: 'Chuyển sang chế độ sáng', title: 'Hung V. Vu',
-          desc: 'Hung V. Vu — sinh viên nghiên cứu vật lý về cơ học thống kê không cân bằng, ước lượng sự kiện hiếm và nhiệt động lực học ngẫu nhiên.' },
+    vi: { toDark: 'Chuyển sang chế độ tối', toLight: 'Chuyển sang chế độ sáng', title: 'Vũ Việt Hưng',
+          desc: 'Vũ Việt Hưng — sinh viên nghiên cứu vật lý về cơ học thống kê không cân bằng, ước lượng sự kiện hiếm và nhiệt động lực học ngẫu nhiên.' },
   };
   const i18nEls = [...document.querySelectorAll('[data-i18n]')];
   i18nEls.forEach(el => { el.dataset.en = el.innerHTML; });   // English is the HTML itself
